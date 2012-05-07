@@ -1,9 +1,9 @@
--module(api_reqest_decode).
--export([api_reqest/0]).
+-module(api_request_decode).
+-export([api_request/0]).
 -include_lib("xmerl/include/xmerl.hrl").
--record(reqest, {name}).
+-record(request, {name}).
 
-api_reqest() ->
+api_request() ->
     case catch xmerl_scan:file("/home/maximus/privat/api/priv/api.xml") of
     	{'EXIT', Reason} -> {error, Reason};
 	{E, _}  ->
@@ -14,10 +14,10 @@ api_reqest() ->
     end.
 
 
-decode_element(#xmlElement{name = reqest} = Reqest) ->
+decode_element(#xmlElement{name = request} = Reqest) ->
     {Name, _} = match_element([name], Reqest#xmlElement.content),
     TextValue = get_text_value(Name#xmlElement.content),
-    #reqest{name=TextValue};
+    #request{name=TextValue};
 
 
     decode_element(E) -> {error, {bad_element, E}}.
