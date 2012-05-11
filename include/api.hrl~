@@ -1,3 +1,3 @@
--record(reqest, {name}).
+-record(request, {name}).
 
 -record(response, {status}).

@@ -22,7 +22,18 @@ start_link() ->
 %% ===================================================================
 %% Supervisor callbacks
 %% ===================================================================
-
 init([]) ->
-    {ok, { {one_for_one, 5, 10}, []} }.
+    WebOptions = [
+                    {port, exlibris_application:get_env(api, http_port, 8080)},
+                    {ip, exlibris_application:get_env(api, http_addr, "127.0.0.1")},
+                    {loop,  fun(Req) -> http_handler:handle_http(Req) end}
+    ],
+    {ok, { 
+        {one_for_one, 5, 10}, 
+        [
+        {misultin, {misultin, start_link, [WebOptions]}, permanent, infinity, supervisor, [misultin]}
+        ]} 
+    }.
+
+
 

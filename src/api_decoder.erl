@@ -1,10 +1,10 @@
--module(api_request_decode).
--export([api_request/0]).
+-module(api_decoder).
+-export([name/1]).
 -include_lib("xmerl/include/xmerl.hrl").
 -record(request, {name}).
 
-api_request() ->
-    case catch xmerl_scan:file("/home/maximus/privat/api/priv/api.xml") of
+name(Xml_name) ->
+    case catch xmerl_scan:string(Xml_name) of
     	{'EXIT', Reason} -> {error, Reason};
 	{E, _}  ->
 	    case catch decode_element(E) of
