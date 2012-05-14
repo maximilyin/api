@@ -10,6 +10,7 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
+    ets:new(message, [ordered_set, public, named_table]),
     api_sup:start_link().
 
 stop(_State) ->

@@ -1,18 +1,18 @@
 -module(http_handler).
 -export([handle_http/1]).
+-include("api.hrl").
 
 handle_http(Req) ->
-    handle_http(Req:get(method), Req:resource(), Req).
+    handle_http(Req:get(method), Req:resource([lowercase, urldecode]), Req).
 
 handle_http('POST', [], Req) -> 
     XmlRequest = binary_to_list(Req:get(body)),
-    io:format("EEEEEEEEEEEEEEE~p~n", [XmlRequest]),
-    case api_decoder:name(XmlRequest) of
-        {request, _Name} ->
-           % ets:insert(massege, Data),
-            Xml = api_encoder:name(ok);
-        {error, _Reason} ->
-            Xml = api_encoder:name(error)        
+    case Data = api_decoder:payload(XmlRequest) of
+         {request, _Name} ->
+             ets:insert(message, Data),
+             Xml = api_encoder:payload(#response{status = ok});
+         {error, _Reason} ->
+             Xml = api_encoder:payload(#response{status = error})      
     end,
 Req:ok([Xml]);
 handle_http(_, _, Req) ->

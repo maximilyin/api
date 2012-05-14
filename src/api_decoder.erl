@@ -1,9 +1,9 @@
 -module(api_decoder).
--export([name/1]).
+-export([payload/1]).
 -include_lib("xmerl/include/xmerl.hrl").
 -record(request, {name}).
 
-name(Xml_name) ->
+payload(Xml_name) ->
     case catch xmerl_scan:string(Xml_name) of
     	{'EXIT', Reason} -> {error, Reason};
 	{E, _}  ->
