@@ -1,5 +1,5 @@
 -record(response, {status}).
--record(request, {name}).
--record(request, {exist}).
+-record(request, {name, exist}).
+
 
 
